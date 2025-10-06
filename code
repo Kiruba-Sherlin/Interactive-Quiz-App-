@@ -1,0 +1,328 @@
+index.html
+
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Homepage -->
+  <div class="home-container" id="home">
+    <h1>Let's Play</h1>
+
+    <div class="level-box easy" onclick="startQuiz('easy')">
+      <div class="level-left">
+        <span class="level-title">Easy</span>
+        <span class="level-number">Level 1</span>
+      </div>
+      <div class="level-right">
+        <img src="img1.png" alt="Easy" class="level-img">
+      </div>
+    </div>
+
+    <div class="level-box medium" onclick="startQuiz('medium')">
+      <div class="level-left">
+        <span class="level-title">Medium</span>
+        <span class="level-number">Level 2</span>
+      </div>
+      <div class="level-right">
+        <img src="img2.png" alt="Medium" class="level-img">
+      </div>
+    </div>
+
+    <div class="level-box hard" onclick="startQuiz('hard')">
+      <div class="level-left">
+        <span class="level-title">Hard</span>
+        <span class="level-number">Level 3</span>
+      </div>
+      <div class="level-right">
+        <img src="img3.png" alt="Hard" class="level-img">
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz Container -->
+  <div class="quiz-container hidden" id="quiz">
+    <h2 id="question">Question Text</h2>
+    <div class="options">
+      <div class="option" id="opt1" onclick="selectAnswer('a')"></div>
+      <div class="option" id="opt2" onclick="selectAnswer('b')"></div>
+      <div class="option" id="opt3" onclick="selectAnswer('c')"></div>
+    </div>
+    <button id="reasonBtn" class="hidden" onclick="showReason()">Show Reason</button>
+  </div>
+
+  <!-- Explanation Page -->
+  <div class="explanation-container hidden" id="explanation">
+    <h2>Explanation</h2>
+    <p id="explanation-text"></p>
+    <button onclick="nextQuestion()">Next</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+style.css
+
+  body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  color: white;
+}
+
+/* Homepage */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 20px;
+  background: #f4f4f9;
+  color: black;
+}
+
+h1 {
+  margin-bottom: 30px;
+}
+
+/* Level Boxes */
+.level-box {
+  width: 350px;
+  padding: 15px 20px;
+  font-weight: bold;
+  border-radius: 12px;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.2s;
+  display: flex;
+  justify-content: space-between; /* Text left, image right */
+  align-items: center;
+}
+
+.level-box:hover {
+  transform: scale(1.05);
+}
+
+.level-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.level-title {
+  font-size: 22px;
+}
+
+.level-number {
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+.level-right img.level-img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+/* Gradient backgrounds for levels */
+.easy {
+  background: linear-gradient(to right, #004464, #b4d0ef); /* dark green → light green */
+}
+.medium {
+  background: linear-gradient(to right, #ce7303, #f9e6bf); /* dark orange → light orange */
+}
+.hard {
+  background: linear-gradient(to right, #8b0000, #f8a6a6); /* dark red → light red */
+}
+
+/* Quiz */
+.quiz-container {
+  height: 100vh;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.options {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.option {
+  padding: 15px;
+  border-radius: 10px;
+  background: #ffffff;   /* White option boxes */
+  color: black;          /* Black text */
+  cursor: pointer;
+  transition: 0.3s;
+  border: 2px solid #ccc;
+}
+
+.option:hover {
+  background: #f0f0f0;   /* Light grey hover */
+}
+
+#reasonBtn {
+  margin-top: 20px;
+  padding: 12px 25px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background: #444;
+  color: white;
+  cursor: pointer;
+}
+
+#reasonBtn:hover {
+  background: #222;
+}
+
+/* Explanation */
+.explanation-container {
+  height: 100vh;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #333;
+}
+
+button {
+  margin-top: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+
+script.js
+
+const quizData = {
+  easy: [
+    { question: "What is the capital of India?", a: "Delhi", b: "Mumbai", c: "Kolkata", correct: "a", reason: "Delhi is the capital of India since 1911." },
+    { question: "Which planet is closest to the Sun?", a: "Venus", b: "Mercury", c: "Mars", correct: "b", reason: "Mercury is the closest planet to the Sun." },
+    { question: "Which is the largest mammal?", a: "Elephant", b: "Blue Whale", c: "Giraffe", correct: "b", reason: "Blue Whale is the largest mammal on Earth." },
+    { question: "How many days are there in a leap year?", a: "365", b: "366", c: "367", correct: "b", reason: "Leap year has 366 days with Feb 29." },
+    { question: "Which gas do humans need to survive?", a: "Oxygen", b: "Carbon Dioxide", c: "Nitrogen", correct: "a", reason: "Humans breathe oxygen to live." }
+  ],
+  medium: [
+    { question: "Who wrote the Ramayana?", a: "Valmiki", b: "Tulsidas", c: "Veda Vyasa", correct: "a", reason: "Valmiki is the author of the Ramayana." },
+    { question: "What is the chemical symbol for Gold?", a: "Au", b: "Ag", c: "Go", correct: "a", reason: "Gold’s symbol is Au from Latin word Aurum." },
+    { question: "Which country hosted 2016 Olympics?", a: "China", b: "Brazil", c: "Japan", correct: "b", reason: "2016 Olympics were hosted in Rio de Janeiro, Brazil." },
+    { question: "Which blood group is universal donor?", a: "O-", b: "AB+", c: "A+", correct: "a", reason: "O- blood group can donate to anyone." },
+    { question: "Which is the smallest prime number?", a: "1", b: "2", c: "3", correct: "b", reason: "2 is the smallest and only even prime number." }
+  ],
+  hard: [
+    { question: "What is the SI unit of force?", a: "Joule", b: "Newton", c: "Pascal", correct: "b", reason: "Newton (N) is the SI unit of force." },
+    { question: "Who is known as the father of computer?", a: "Charles Babbage", b: "Alan Turing", c: "Bill Gates", correct: "a", reason: "Charles Babbage designed the first mechanical computer." },
+    { question: "Which element has atomic number 1?", a: "Helium", b: "Oxygen", c: "Hydrogen", correct: "c", reason: "Hydrogen is atomic number 1 in the periodic table." },
+    { question: "Who painted the Mona Lisa?", a: "Leonardo da Vinci", b: "Pablo Picasso", c: "Michelangelo", correct: "a", reason: "Mona Lisa was painted by Leonardo da Vinci." },
+    { question: "Where is the Great Barrier Reef located?", a: "Australia", b: "USA", c: "India", correct: "a", reason: "The Great Barrier Reef is off the coast of Queensland, Australia." }
+  ]
+};
+
+let currentLevel = "";
+let currentQuiz = 0;
+let score = 0;
+
+const home = document.getElementById("home");
+const quiz = document.getElementById("quiz");
+const explanation = document.getElementById("explanation");
+
+const questionEl = document.getElementById("question");
+const opt1 = document.getElementById("opt1");
+const opt2 = document.getElementById("opt2");
+const opt3 = document.getElementById("opt3");
+const explanationText = document.getElementById("explanation-text");
+const reasonBtn = document.getElementById("reasonBtn");
+
+function startQuiz(level) {
+  currentLevel = level;
+  currentQuiz = 0;
+  score = 0;
+
+  home.classList.add("hidden");
+  quiz.classList.remove("hidden");
+
+  setLevelColor();
+  loadQuiz();
+}
+
+function setLevelColor() {
+  if (currentLevel === "easy") quiz.style.background = "#004464";   // dark green
+  if (currentLevel === "medium") quiz.style.background = "#ce7303"; // dark orange
+  if (currentLevel === "hard") quiz.style.background = "#8b0000";   // dark red
+}
+
+
+function loadQuiz() {
+  deselectOptions();
+  const qData = quizData[currentLevel][currentQuiz];
+  questionEl.innerText = qData.question;
+  opt1.innerText = qData.a;
+  opt2.innerText = qData.b;
+  opt3.innerText = qData.c;
+  reasonBtn.classList.add("hidden");
+}
+
+function deselectOptions() {
+  [opt1, opt2, opt3].forEach(opt => {
+    opt.style.background = "#ffffff"; // reset to white
+    opt.style.color = "black";
+    opt.style.pointerEvents = "auto"; // re-enable click
+  });
+}
+
+function selectAnswer(ans) {
+  const qData = quizData[currentLevel][currentQuiz];
+  let correctAns = qData.correct;
+
+  [opt1, opt2, opt3].forEach(opt => opt.style.pointerEvents = "none");
+
+  // Highlight correct
+  if (correctAns === "a") opt1.style.background = quiz.style.background;
+  if (correctAns === "b") opt2.style.background = quiz.style.background;
+  if (correctAns === "c") opt3.style.background = quiz.style.background;
+
+  // Wrong → red
+  if (ans !== correctAns) {
+    if (ans === "a") opt1.style.background = "red";
+    if (ans === "b") opt2.style.background = "red";
+    if (ans === "c") opt3.style.background = "red";
+  } else {
+    score++;
+  }
+
+  reasonBtn.classList.remove("hidden");
+}
+
+function showReason() {
+  const qData = quizData[currentLevel][currentQuiz];
+  quiz.classList.add("hidden");
+  explanation.classList.remove("hidden");
+  explanationText.innerText = qData.reason;
+}
+
+function nextQuestion() {
+  currentQuiz++;
+  if (currentQuiz < quizData[currentLevel].length) {
+    quiz.classList.remove("hidden");
+    explanation.classList.add("hidden");
+    setLevelColor();
+    loadQuiz();
+  } else {
+    explanation.innerHTML = `<h2>You got ${score}/${quizData[currentLevel].length} correct!</h2>
+    <button onclick="location.reload()">Restart</button>`;
+  }
+}
